@@ -3,13 +3,13 @@ console.log('Destructuring');
 // Object (객체 구조 분해 할당)
 function getUserInfo() {
   return {
-    firstName : 'John',
-    lastName : 'Doe',
-    age : 37,
-    email : 'john@gmail.con',
-    city : 'New York',
-    country : 'USA',
-    info : function() {
+    firstName: 'John',
+    lastName: 'Doe',
+    age: 37,
+    email: 'john@gmail.con',
+    city: 'New York',
+    country: 'USA',
+    info: function () {
       return 'My Name is ' + this.lastName;
     }
   };
@@ -33,5 +33,3 @@ console.log(a, b);
 
 let [e, f, g, h] = ary;
 console.log(e, f, g, h);
-
-// 주석 추가
