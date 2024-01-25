@@ -1,7 +1,6 @@
 console.log('Destructuring');
 
-// Object
-
+// Object (객체 구조 분해 할당)
 function getUserInfo() {
   return {
     firstName : 'John',
