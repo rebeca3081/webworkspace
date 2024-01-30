@@ -1,6 +1,7 @@
 const fs = require('fs');
 const express = require('express');
 const app = express(); // 서버관리 객체
+const userRouter = require('./user.js'); // router불러옴 : 파일로 인식시켜야함
 
 // 미들웨어
 // -- Request Data Process
@@ -18,15 +19,16 @@ app.use(function(err, req, res, next) {
   res.status(500).json({statusCode : res.statusCode,
                         errMessage : res.errMessage});
 });
-// 2. 커스텀 에러
-app.get('/customErr', (req, res, next) => {
-  next(new Error('Process Fail! Check Data!'));
-})
 
-// 1. 기본 에러
+// (1) 기본 에러
 app.get('/defaultErr', (req, res) => {
   throw new Error('기본 핸들러 동작!'); // 500번 에러(interner server error), 404(없는 경로)
 });
+
+// (2) 커스텀 에러
+app.get('/customErr', (req, res, next) => {
+  next(new Error('Process Fail! Check Data!'));
+})
 
 // -- Static
 app.use(express.static('./files'));
@@ -50,13 +52,16 @@ const getData = (target, where) => {
   return data;
 }
 
+//
+app.use('/user', userRouter); // user.js의 Router
+
 // 기능과 라우팅은 분리!
 // 라우팅은 심플하고 명확하게!, 기능(함수)을 라우팅에서 호출해서 사용!
-
 app.listen(3000, () => { // 서버실행(포트번호) -> .listen()은 기본적으로 1개만 실행
   console.log('Server Start');
   console.log('http://localhost:3000');
 });
+
 
 app.get('/', (req, res) => { // 라우팅정보 .get('경로구분(endPoint)', ('From client','To client') => {})
   res.send('Hello, Express.js World');
@@ -117,9 +122,9 @@ app.delete('/posts/:id', (req, res) => {
 })
 
 // 검색을 포함하는 경우 - QueryString : 유연하게 대응이 가능
+// list[0].id=100&list[0].name=hong&...
 app.get('/search', (req, res) => {
   let keywords = req.query;
   console.log('검색 조건 구성', keywords);
   res.json(keywords);
-  
 })
