@@ -1,4 +1,5 @@
 // app.js
+require('dotenv').config({ path: './db/dbSetting.env' }) // 제일 처음에 실행될때(최소 mysql전에 사용해야함) 넣어주는것이 좋음
 const express = require('express');
 const app = express();
 const mysql = require('./db.js');
@@ -25,9 +26,9 @@ app.get('/users', async (req, res) => {
 });
 
 // 2.단건조회
-app.get('/users/:no', async (req, res) => {
-  let userNo = req.params.no;
-  let info = (await mysql.executeQuery('userInfo', userNo))[0];
+app.get('/users/:id', async (req, res) => {
+  let userId = req.params.id;
+  let info = (await mysql.executeQuery('userInfo', userId))[0];
   res.json(info);
 });
 
@@ -39,7 +40,7 @@ app.post('/users', async (req, res) => {
 });
 
 // 4.수정
-app.put('/users/:no', async (req, res) => {
+app.put('/users/:id', async (req, res) => {
   // let result = await updateAll(req); // 수정_ver.1
   let result = await updateInfo(req); // 수정_ver.2
   res.json(result);
@@ -47,14 +48,14 @@ app.put('/users/:no', async (req, res) => {
 
 // 수정_ver.1
 async function updateAll(req) { // 수정_ver.1
-  let data = [selectedInfo(req.body.userInfo), req.params.no]; // [객체, 단일값u_id]
+  let data = [selectedInfo(req.body.userInfo), req.params.id]; // [객체, 단일값u_id]
   let result = await mysql.executeQuery('userUpdateAll', data);
   return result;
 };
 
-// client가 보내는 데이터 중에 "user_no" 필드 제외 하는 기능의 함수 (수정_ver.1)
+// client가 보내는 데이터 중에 "user_id" 필드 제외 하는 기능의 함수 (수정_ver.1)
 function selectedInfo(obj) {
-  let delData = ["user_no"]
+  let delData = ["user_id", "user_no"];
   let newObj = {};
   let isTargeted = null;
   for (let field in obj) {
@@ -74,7 +75,7 @@ function selectedInfo(obj) {
 
 // 수정_ver.2
 async function updateInfo(req) {
-  let data = [...getInfo(req.body.userInfo), req.params.no]; // 단일값 5개 : user_pw, user_name, user_age, join_date, user_no
+  let data = [...getInfo(req.body.userInfo), req.params.id]; // 단일값 5개 : user_pw, user_name, user_age, join_date, user_no
   let result = await mysql.executeQuery('userUpdateInfo', data);
   return result;
 }
@@ -95,9 +96,9 @@ function getInfo(obj) {
 };
 
 // 5.삭제
-app.delete('/users/:no', async (req, res) => {
-  let userNo = req.params.no;
-  let result = await mysql.executeQuery('userDelete', userNo);
-  // res.json(result);
-  res.sendStatus(203);
+app.delete('/users/:id', async (req, res) => {
+  let userId = req.params.id;
+  let result = await mysql.executeQuery('userDelete', userId);
+  res.json(result);
+  // res.sendStatus(203);
 })

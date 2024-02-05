@@ -1,15 +1,18 @@
 // db.js
-const mysql = require('mysql');
-const sql = require('./db/t_userSql.js');
+const mysql = require('mysql'); // 모듈
+const sql = require('./db/t_userSql.js'); // 쿼리문
+
+console.dir(process.env);
 
 // Connection Pool 생성
 const connectionPool = mysql.createPool({
-  host: '127.0.0.1',
-  port: '3306',
-  user: 'dev01',
-  password: '1234',
-  database: 'dev',
-  connectionLimit: 10,
+  // 민감한 DB정보는 하드코딩X, 동적으로 가져올 수 있도록 함.
+  host: process.env.MYSQL_HOST, // DB의 IP
+  port: process.env.MYSQL_PORT,
+  user: process.env.MYSQL_USER,
+  password: process.env.MYSQL_PWD,
+  database: process.env.MYSQL_DB, // mysql은 어떤 database를 사용할지 적어야함
+  connectionLimit: process.env.MYSQL_CONNECT_LIMIT,
   debug: true,
   dateStrings: "date" // boolean | ("TIMESTAMP" | "DATETIME" | "DATE")
   // Connection options 중에 Date type -> String으로 반환하도록 함
