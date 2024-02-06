@@ -41,14 +41,14 @@ app.post('/users', async (req, res) => {
 
 // 4.수정
 app.put('/users/:id', async (req, res) => {
-  // let result = await updateAll(req); // 수정_ver.1
-  let result = await updateInfo(req); // 수정_ver.2
+  let result = await updateAll(req); // 수정_ver.1
+  // let result = await updateInfo(req); // 수정_ver.2
   res.json(result);
 });
 
 // 수정_ver.1
 async function updateAll(req) { // 수정_ver.1
-  let data = [selectedInfo(req.body.userInfo), req.params.id]; // [객체, 단일값u_id]
+  let data = [selectedInfo(req.body.param), req.params.id]; // [객체, 단일값u_id]
   let result = await mysql.executeQuery('userUpdateAll', data);
   return result;
 };
