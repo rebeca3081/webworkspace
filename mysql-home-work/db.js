@@ -13,9 +13,7 @@ const connectionPool = mysql.createPool({
   password: process.env.MYSQL_PWD,
   database: process.env.MYSQL_DB, // mysql은 어떤 database를 사용할지 적어야함
   connectionLimit: process.env.MYSQL_CONNECT_LIMIT,
-  debug: true,
-  dateStrings: "date" // boolean | ("TIMESTAMP" | "DATETIME" | "DATE")
-  // Connection options 중에 Date type -> String으로 반환하도록 함
+  debug: true
 });
 
 // 쿼리문을 실행하고 결과를 반환하는 함수

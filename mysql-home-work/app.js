@@ -34,7 +34,7 @@ app.get('/users/:id', async (req, res) => {
 
 // 3.등록
 app.post('/users', async (req, res) => {
-  let data = req.body.userInfo;
+  let data = req.body.param;
   let result = await mysql.executeQuery('userInsert', data);
   res.json(result);
 });
